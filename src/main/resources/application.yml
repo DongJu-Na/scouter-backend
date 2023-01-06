@@ -1,0 +1,53 @@
+spring:
+  profiles:
+    active: local
+  banner:
+    location: classpath:application/banner/banner.txt
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.mariadb.jdbc.Driver
+    hikari:
+      pool-name: Hikari
+      minimum-idle: 5
+      maximum-pool-size: 10
+      max-lifetime: 60000
+      idle-timeout: 10000
+      autoCommit: false
+      connection-init-sql: SET TIME_ZONE = '+09:00'
+      connection-test-query: SELECT 1
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+    data:
+      jpa:
+        repositories:
+          bootstrap-mode: deferred
+  jpa:
+    hibernate:
+      naming:
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  main:
+    allow-bean-definition-overriding: false
+  web:
+    resources:
+      add-mappings: false
+  flyway:
+    baseline-on-migrate: true
+    locations: classpath:application/flyway/release
+    group: true
+    baseline-version: 0.0.1
+    enabled: true
+  servlet:
+    multipart:
+      max-file-size: 50MB
+server:
+  undertow:
+    accesslog:
+      enabled: true
+      prefix: scouter_access.
+  port: 8080
+logging:
+  config: classpath:logback-spring.xml
