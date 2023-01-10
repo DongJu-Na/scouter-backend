@@ -1,0 +1,28 @@
+= Rest Docs Account API Document
+notification-api-docs
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+
+== User
+=== 유저 로그인
+==== 요청
+==== Request Sample
+include::{snippets}/post/request-body.adoc[]
+
+==== Request Field
+include::{snippets}/post/request-fields.adoc[]
+
+==== Response Sample
+include::{snippets}/post/http-request.adoc[]
+
+==== Response Fields
+include::{snippets}/post/response-fields.adoc[]

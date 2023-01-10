@@ -6,6 +6,9 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/scouter_local?useMysqlMetadata=true
+    username: root
+    password: 1234
     hikari:
       pool-name: Hikari
       minimum-idle: 5
@@ -25,10 +28,18 @@ spring:
         repositories:
           bootstrap-mode: deferred
   jpa:
+    show-sql: true
+    open-in-view: true
+    database-platform: org.hibernate.dialect.MariaDB103Dialect
+    properties:
+      hibernate:
+        format_sql: true
     hibernate:
+      ddl-auto: validate
       naming:
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        physical-strategy: com.kite.scouter.global.CustomNamingStrategy
+    generate-ddl: false
   main:
     allow-bean-definition-overriding: false
   web:
@@ -36,10 +47,9 @@ spring:
       add-mappings: false
   flyway:
     baseline-on-migrate: true
-    locations: classpath:application/flyway/release
     group: true
     baseline-version: 0.0.1
-    enabled: true
+    ignore-migration-patterns:
   servlet:
     multipart:
       max-file-size: 50MB

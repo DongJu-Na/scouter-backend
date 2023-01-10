@@ -1,0 +1,39 @@
+spring:
+  jpa:
+    hibernate:
+      naming:
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        physical-strategy: com.kite.scouter.global.CustomNamingStrategy
+      ddl-auto: create
+    show-sql: true
+    open-in-view: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;DATABASE_TO_UPPER=true
+    driver-class-name: org.h2.Driver
+    username: sa
+    hikari:
+      connection-init-sql: SELECT 1
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: false
+  aop:
+    proxy-target-class: true
+  flyway:
+    enabled: false
+  sql:
+    init:
+      platform: org.hibernate.dialect.H2Dialect
+      separator: ^;
+      mode: never
+  servlet:
+    multipart:
+      location: /Users/ftpfile
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug

@@ -6,14 +6,10 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Component
-@PropertySource("classpath:application/jwt/jwt.properties")
+@PropertySource("classpath:application/properties/jwtSecret.properties")
 @Getter
-public class JwtProperties {
+public class JwtSecretProperties {
 
-  @Value("${jwt.expire.minutes}")
-  private Long expireMinutes;
-
-  @Value("${jwt.refresh.expire.minutes}")
-  private Long refreshExpireMinutes;
-
+  @Value("${jwtSecret.key}")
+  private String jwtSecretKey;
 }

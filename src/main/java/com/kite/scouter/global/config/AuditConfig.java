@@ -1,9 +1,7 @@
-package com.kite.scouter.global.config.auditing;
-
-import java.util.Optional;
+package com.kite.scouter.global.config;
 
 import com.kite.scouter.global.utils.LocalDateTimeUtil;
-
+import java.util.Optional;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.auditing.DateTimeProvider;
