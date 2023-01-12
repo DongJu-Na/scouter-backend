@@ -10,6 +10,7 @@ group = 'com.kite'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
+
 // === Querydsl 빌드 옵션 (선택사항) ===
 def querydslSrcDir = "$buildDir/generated/querydsl"
 
@@ -21,14 +22,16 @@ querydsl {
 
 sourceSets { main { java { srcDirs = ["src/main/java", querydslSrcDir] } } }
 
-compileQuerydsl { options.annotationProcessorPath = configurations.querydsl }
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
+}
 
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
-	asciidoctorExt
 	querydsl.extendsFrom compileClasspath
+	asciidoctorExt
 }
 
 repositories {
@@ -42,6 +45,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation "org.springframework.boot:spring-boot-starter-webflux"
 	implementation 'org.flywaydb:flyway-core:9.10.2'
 	implementation 'org.flywaydb:flyway-mysql:9.10.2'
 	implementation 'org.yaml:snakeyaml:1.33'
@@ -70,10 +74,7 @@ dependencies {
 
 	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 }
-
-ext {
-	snippetsDir = file('build/generated-snippets')
-}
+def snippetsDir = "$buildDir/generated-snippets"
 
 test {
 	outputs.dir snippetsDir
@@ -92,6 +93,7 @@ bootJar {
 		into 'static/docs'
 	}
 }
+
 jar {
 	enabled = false
 }

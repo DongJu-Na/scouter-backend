@@ -60,4 +60,16 @@ server:
       prefix: scouter_access.
   port: 8080
 logging:
-  config: classpath:logback-spring.xml
+  file:
+    path: /Documents/GitHub/logs
+  level:
+    org:
+      springframework:
+        web: debug
+        http : debug
+        security : debug
+      hibernate:
+        SQL: debug
+        type:
+          descriptor:
+            sql: trace

@@ -12,7 +12,6 @@ import com.kite.scouter.global.enums.Role;
 import com.kite.scouter.global.enums.LoginType;
 import com.kite.scouter.global.core.BaseEntity;
 
-import jakarta.persistence.Table;
 import java.util.Collection;
 import java.util.List;
 import lombok.AccessLevel;
@@ -26,7 +25,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "USER")
 public class User extends BaseEntity implements UserDetails {
 
   @Id
