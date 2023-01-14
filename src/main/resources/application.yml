@@ -49,6 +49,7 @@ spring:
     baseline-on-migrate: true
     group: true
     baseline-version: 0.0.1
+    enabled: true
     ignore-migration-patterns:
   servlet:
     multipart:
@@ -57,7 +58,6 @@ server:
   undertow:
     accesslog:
       enabled: true
-      prefix: scouter_access.
   port: 8080
 logging:
   file:
@@ -73,3 +73,6 @@ logging:
         type:
           descriptor:
             sql: trace
+      apache:
+        tomcat: debug
+    web: debug

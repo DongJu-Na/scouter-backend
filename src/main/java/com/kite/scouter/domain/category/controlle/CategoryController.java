@@ -1,0 +1,24 @@
+package com.kite.scouter.domain.category.controlle;
+
+import com.kite.scouter.domain.category.model.Category;
+import com.kite.scouter.domain.category.repository.CategoryRepository;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/v1/category")
+@RequiredArgsConstructor
+public class CategoryController {
+
+  private final CategoryRepository categoryRepository;
+
+  @GetMapping
+  public ResponseEntity<List<Category>> seyHello() {
+    return ResponseEntity.ok(categoryRepository.findAll());
+  }
+
+}

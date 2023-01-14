@@ -30,7 +30,7 @@ public class WebClientConfig {
         .builder()
         .clientConnector(new ReactorClientHttpConnector(httpClient))
         .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-        .defaultHeader("X-Riot-Token", "RGAPI-736e809d-a63f-4d13-8f1f-6ae5caa781df")
+        .defaultHeader("X-Riot-Token", "RGAPI-184067f9-961f-4131-b6b1-4546377bcda2")
         .defaultHeader(HttpHeaders.ORIGIN,"https://developer.riotgames.com")
         .defaultHeader(HttpHeaders.ACCEPT_CHARSET,"application/x-www-form-urlencoded; charset=UTF-8")
         .exchangeStrategies(exchangeStrategies)

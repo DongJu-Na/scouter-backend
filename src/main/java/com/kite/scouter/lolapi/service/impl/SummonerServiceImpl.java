@@ -2,16 +2,13 @@ package com.kite.scouter.lolapi.service.impl;
 
 import com.kite.scouter.global.enums.LOLBaseUrl;
 import com.kite.scouter.lolapi.dto.LeagueEntryVO;
+import com.kite.scouter.lolapi.dto.MatchesVO;
 import com.kite.scouter.lolapi.dto.SummonerVO;
 import com.kite.scouter.lolapi.service.SummonerService;
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -31,17 +28,17 @@ public class SummonerServiceImpl implements SummonerService {
   }
 
   @Override
-  public Mono<List> getMatchesByPuuid(String puuid,
+  public Mono<MatchesVO> getMatchesByPuuid(String puuid,
                                                       int start,
                                                       int count) {
 
-    Mono<List> result = webClient.get()
-        .uri(LOLBaseUrl.ASIA.getTitle() + "/lol/match/v5/mahtches/by-puuid/".concat(puuid).concat("/ids"))
+    Mono<MatchesVO> result = webClient.get()
+        .uri(LOLBaseUrl.ASIA.getTitle() + "/lol/match/v5/matches/by-puuid/".concat(puuid).concat("/ids"))
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
-        .bodyToMono(List.class);
+        .bodyToMono(MatchesVO.class);
 
-    result.subscribe(System.out::println);
+    System.out.println(result);
 
     return result;
   }
@@ -49,7 +46,7 @@ public class SummonerServiceImpl implements SummonerService {
   @Override
   public Mono<Object[]> getMatchByMatchId(String matchId) {
     return  webClient.get()
-        .uri(LOLBaseUrl.ASIA.getTitle() + "/lol/match/v5/mahtches/".concat(matchId))
+        .uri(LOLBaseUrl.ASIA.getTitle() + "/lol/match/v5/matches/".concat(matchId))
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
         .bodyToMono(Object[].class);
@@ -63,4 +60,5 @@ public class SummonerServiceImpl implements SummonerService {
         .retrieve()
         .toEntity(LeagueEntryVO.class);
   }
+
 }
