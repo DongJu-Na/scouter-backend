@@ -1,0 +1,60 @@
+= Rest Docs Board API Document
+notification-api-docs
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+
+== Board
+=== 게시판 목록 조회
+==== 요청
+include::{snippets}/get-boards/http-request.adoc[]
+include::{snippets}/get-boards/query-parameters.adoc[]
+
+==== 응답
+include::{snippets}/get-boards/http-response.adoc[]
+include::{snippets}/get-boards/response-fields.adoc[]
+
+=== 게시글 조회
+==== 요청
+include::{snippets}/get-board/http-request.adoc[]
+include::{snippets}/get-board/path-parameters.adoc[]
+
+==== 응답
+include::{snippets}/get-board/http-response.adoc[]
+include::{snippets}/get-board/response-fields.adoc[]
+
+=== 게시글 작성
+==== 요청
+include::{snippets}/post-boards/http-request.adoc[]
+include::{snippets}/post-boards/request-fields.adoc[]
+
+==== 응답
+include::{snippets}/post-boards/http-response.adoc[]
+include::{snippets}/post-boards/response-fields.adoc[]
+
+=== 게시글 수정
+==== 요청
+include::{snippets}/put-boards/http-request.adoc[]
+include::{snippets}/put-boards/path-parameters.adoc[]
+include::{snippets}/put-boards/request-fields.adoc[]
+
+==== 응답
+include::{snippets}/put-boards/http-response.adoc[]
+include::{snippets}/put-boards/response-fields.adoc[]
+
+=== 게시글 삭제
+==== 요청
+include::{snippets}/delete-boards/http-request.adoc[]
+include::{snippets}/delete-boards/path-parameters.adoc[]
+
+==== 응답
+include::{snippets}/delete-boards/http-response.adoc[]
+include::{snippets}/delete-boards/response-fields.adoc[]

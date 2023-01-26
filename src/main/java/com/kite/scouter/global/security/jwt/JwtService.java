@@ -1,33 +1,35 @@
 package com.kite.scouter.global.security.jwt;
 
 
+import com.kite.scouter.domain.auth.dto.UserContext;
+import com.kite.scouter.global.properties.JwtProperties;
+import com.kite.scouter.global.properties.JwtSecretProperties;
+import com.kite.scouter.global.utils.SecurityUtil;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 import java.util.function.Function;
-import org.springframework.beans.factory.annotation.Value;
+import javax.crypto.spec.SecretKeySpec;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
 
-  @Value("${jwtSecret.key}")
-  private String SecretKey ;
+  private final JwtSecretProperties jwtSecretProperties;
 
-  @Value("${jwt.expire.minutes}")
-  private static Long expireMinutes;
-
-  @Value("${jwt.refresh.expire.minutes}")
-  private static Long refreshExpireMinutes;
+  private final JwtProperties jwtProperties;
 
   public String extractUsername(String token) {
     return extractClaim(token, Claims::getSubject);
@@ -38,23 +40,28 @@ public class JwtService {
     return claimsResolver.apply(claims);
   }
 
-  public String generateToken(UserDetails userDetails) {
-    return generateToken(new HashMap<>(), userDetails);
+  public String generateToken(final UserContext userContext) {
+    return generateToken(userContext, SecurityUtil.getDateFromUtcZonedDateTime(jwtProperties.getExpireMinutes()));
+  }
+
+  public String generateRefreshToken(final UserContext userContext) {
+    return generateToken(userContext, SecurityUtil.getDateFromUtcZonedDateTime(jwtProperties.getRefreshExpireMinutes()));
   }
 
   public String generateToken(
-      Map<String, Object> extractClaim,
-      UserDetails userDetails
+      final UserContext userContext,
+      final Date expire
   ) {
     return Jwts
         .builder()
-        .setClaims(extractClaim)
-        .setSubject(userDetails.getUsername())
-        .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 100))
+        .setSubject(userContext.getEmail())
+        .claim("NICK_NAME",userContext.getNickName())
+        .setIssuedAt(SecurityUtil.getDateFromUtcZonedDateTime())
+        .setExpiration(expire)
         .signWith(getSignInKey(), SignatureAlgorithm.HS256)
         .compact();
   }
+
 
   public boolean isTokenValid(String token, UserDetails userDetails) {
     final String username = extractUsername(token);
@@ -62,7 +69,7 @@ public class JwtService {
   }
 
   private boolean isTokenExpired(String token) {
-    return extractExpiration(token).before(new Date());
+    return extractExpiration(token).before(SecurityUtil.getDateFromUtcZonedDateTime());
   }
 
   private Date extractExpiration(String token) {
@@ -79,7 +86,24 @@ public class JwtService {
   }
 
   private Key getSignInKey() {
-    byte[] keyBytes = Decoders.BASE64.decode(SecretKey);
+    byte[] keyBytes = Decoders.BASE64.decode(jwtSecretProperties.getJwtSecretKey());
     return Keys.hmacShaKeyFor(keyBytes);
+  }
+
+  public UserContext decodeJwt(final String token) {
+    Jwt decodedJWT = jwtDecoder().decode(token);
+    return UserContext.of(
+        decodedJWT.getSubject(),
+        decodedJWT.getClaim("NICK_NAME").toString()
+    );
+  }
+
+  public JwtDecoder jwtDecoder() {
+    return NimbusJwtDecoder.withSecretKey(new SecretKeySpec(Decoders.BASE64.decode(jwtSecretProperties.getJwtSecretKey()), SignatureAlgorithm.HS256.getValue()))
+        .build();
+  }
+
+  public String getJWTofAuthorization(final HttpServletRequest request) {
+    return request.getHeader("Authorization").substring(7);
   }
 }

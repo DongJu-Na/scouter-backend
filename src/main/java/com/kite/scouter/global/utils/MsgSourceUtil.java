@@ -12,10 +12,6 @@ public class MsgSourceUtil {
     return BeanProvider.getBean(MessageSource.class);
   }
 
-  public static String getMsg(final MessageSourceProvider messageSourceProvider) {
-    return getDefaultMsgSource().getMessage(messageSourceProvider, Locale.KOREA);
-  }
-
   public static String getMsg(final String code) {
     return getDefaultMsgSource().getMessage(MessageSourceProvider.of(code), Locale.KOREA);
   }
@@ -30,8 +26,5 @@ public class MsgSourceUtil {
     return getDefaultMsgSource().getMessage(MessageSourceProvider.of(code, objects), Locale.KOREA);
   }
 
-  public static String getMsg(final MessageSourceResolvable resolvable) {
-    return getDefaultMsgSource().getMessage(MessageSourceProvider.of(resolvable), Locale.KOREA);
-  }
 
 }

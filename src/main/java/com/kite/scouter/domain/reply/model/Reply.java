@@ -1,5 +1,6 @@
 package com.kite.scouter.domain.reply.model;
 
+import com.kite.scouter.domain.board.model.Board;
 import com.kite.scouter.domain.user.model.User;
 import com.kite.scouter.global.core.BaseEntity;
 import jakarta.persistence.Entity;
@@ -25,16 +26,29 @@ public class Reply extends BaseEntity {
 
   private String replyContent;
 
+  private Boolean enable = true;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "replyUser")
   private User user;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "replyBoard")
+  private Board board;
+
   @Builder
   private Reply(
       final String replyContent,
-      final User replyUser) {
+      final User user,
+      final Board board) {
     this.replyContent = replyContent;
     this.user = user;
+    this.board = board;
   }
+
+  public void changeEnable(final Boolean enable) {
+    this.enable = enable;
+  }
+  public void changeContent(final String replyContent) {this.replyContent = replyContent;}
 
 }

@@ -1,0 +1,51 @@
+= Rest Docs reply API Document
+notification-api-docs
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+
+== Reply
+=== 댓글 목록 조회
+==== 요청
+include::{snippets}/get-replys/http-request.adoc[]
+include::{snippets}/get-replys/query-parameters.adoc[]
+
+==== 응답
+include::{snippets}/get-replys/http-response.adoc[]
+include::{snippets}/get-replys/response-fields.adoc[]
+
+=== 댓글 작성
+==== 요청
+include::{snippets}/post-replys/http-request.adoc[]
+include::{snippets}/post-replys/request-fields.adoc[]
+
+==== 응답
+include::{snippets}/post-replys/http-response.adoc[]
+include::{snippets}/post-replys/response-fields.adoc[]
+
+=== 댓글 수정
+==== 요청
+include::{snippets}/put-replys/http-request.adoc[]
+include::{snippets}/put-replys/path-parameters.adoc[]
+include::{snippets}/put-replys/request-fields.adoc[]
+
+==== 응답
+include::{snippets}/put-replys/http-response.adoc[]
+include::{snippets}/put-replys/response-fields.adoc[]
+
+=== 댓글 삭제
+==== 요청
+include::{snippets}/delete-replys/http-request.adoc[]
+include::{snippets}/delete-replys/path-parameters.adoc[]
+
+==== 응답
+include::{snippets}/delete-replys/http-response.adoc[]
+include::{snippets}/delete-replys/response-fields.adoc[]

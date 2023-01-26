@@ -1,6 +1,9 @@
 package com.kite.scouter.global.security.filter;
 
+import com.kite.scouter.global.enums.ResponseCode;
+import com.kite.scouter.global.exception.InvalidJwtException;
 import com.kite.scouter.global.security.jwt.JwtService;
+import com.kite.scouter.global.utils.ObjectUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,14 +31,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   protected void doFilterInternal(
       @NonNull HttpServletRequest request,
       @NonNull HttpServletResponse response,
-      @NonNull FilterChain filterChain) throws ServletException, IOException {
+      @NonNull FilterChain filterChain) throws ServletException, IOException, InvalidJwtException {
     final String authHeader = request.getHeader("Authorization");
     final String jwt;
     final String userEmail;
+
     if (authHeader == null || !authHeader.startsWith("Bearer ")){
       filterChain.doFilter(request, response);
       return;
     }
+
     jwt = authHeader.substring(7);
     userEmail = jwtService.extractUsername(jwt);
     if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {

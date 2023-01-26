@@ -38,8 +38,6 @@ public class SummonerServiceImpl implements SummonerService {
         .retrieve()
         .bodyToMono(MatchesVO.class);
 
-    System.out.println(result);
-
     return result;
   }
 

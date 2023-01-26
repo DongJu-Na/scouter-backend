@@ -6,7 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Component
-@PropertySource("classpath:application/properties/jwtSecret.properties")
+@PropertySource("classpath:application/jwt/jwtSecret.properties")
 @Getter
 public class JwtSecretProperties {
 

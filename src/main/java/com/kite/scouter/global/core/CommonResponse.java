@@ -14,13 +14,14 @@ public class CommonResponse<T> {
                          final String message,
                          final T data) {
     this.code = code;
-    this.message = "";
+    this.message = message;
     this.data = data;
   }
 
   public static <T> CommonResponse<T> of(final String code,
+                                         final String message,
                                          final T data) {
-    return new CommonResponse<>(code, "", data);
+    return new CommonResponse<>(code, message, data);
   }
 
   private CommonResponse(final ResponseCode responseCode,

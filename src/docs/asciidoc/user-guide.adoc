@@ -13,16 +13,19 @@ endif::[]
 
 
 == User
+
+=== 유저 가입
+==== 요청
+include::{snippets}/user-join/http-request.adoc[]
+include::{snippets}/user-join/request-fields.adoc[]
+
+include::{snippets}/user-join/http-request.adoc[]
+include::{snippets}/user-join/response-fields.adoc[]
+
 === 유저 로그인
 ==== 요청
-==== Request Sample
-include::{snippets}/post/request-body.adoc[]
+include::{snippets}/user-login/http-request.adoc[]
+include::{snippets}/user-login/request-fields.adoc[]
 
-==== Request Field
-include::{snippets}/post/request-fields.adoc[]
-
-==== Response Sample
-include::{snippets}/post/http-request.adoc[]
-
-==== Response Fields
-include::{snippets}/post/response-fields.adoc[]
+include::{snippets}/user-login/http-request.adoc[]
+include::{snippets}/user-login/response-fields.adoc[]

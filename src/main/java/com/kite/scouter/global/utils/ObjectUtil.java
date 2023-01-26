@@ -13,10 +13,5 @@ public class ObjectUtil {
     return ObjectUtils.isEmpty(data);
   }
 
-  public static String splitAndLast(final String text,
-                                    final String regex) {
-    String[] array = text.split(regex);
-    return array[array.length - 1];
-  }
 
 }

@@ -12,7 +12,7 @@ sourceCompatibility = '17'
 
 
 // === Querydsl 빌드 옵션 (선택사항) ===
-def querydslSrcDir = "$buildDir/generated/querydsl"
+def querydslSrcDir = "build/generated/querydsl"
 
 querydsl {
 	library = "com.querydsl:querydsl-apt:5.0.0"
@@ -41,6 +41,7 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-undertow'
+	implementation "org.springframework.boot:spring-boot-starter-validation"
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
@@ -74,7 +75,7 @@ dependencies {
 
 	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 }
-def snippetsDir = "$buildDir/generated-snippets"
+def snippetsDir = "build/generated-snippets"
 
 test {
 	outputs.dir snippetsDir

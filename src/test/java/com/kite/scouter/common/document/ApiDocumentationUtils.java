@@ -19,29 +19,6 @@ import org.springframework.restdocs.payload.ResponseFieldsSnippet;
 
 public interface ApiDocumentationUtils {
 
-  static OperationRequestPreprocessor getDocumentRequest() {
-    return preprocessRequest(
-      modifyUris()
-        .scheme("https")
-        .host("api-mk1-dev.miraeassetpay.kr")
-        .removePort(),
-      prettyPrint()
-    );
-  }
-
-  static OperationResponsePreprocessor getDocumentResponse() {
-    return preprocessResponse(prettyPrint());
-  }
-
-  static ResponseFieldsSnippet getErrorResponseFieldsWithFieldErrors() {
-    return responseFields(
-        fieldWithPath("status").description("에러 상태"),
-        fieldWithPath("code").description("에러 코드"),
-        fieldWithPath("message").description("에러 메세지"),
-        subsectionWithPath("errors").description("필드 에러").optional()
-    );
-  }
-
   static ResponseFieldsSnippet getResponseFieldsSnippetByFieldDescriptors(final JsonFieldType responseDataType,
                                                                           final FieldDescriptor... targetDescriptors) {
 

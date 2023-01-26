@@ -41,7 +41,7 @@ public class UserLoaderListener implements ApplicationListener<ApplicationStarte
   }
 
   private void createUserAssertNull(final User user) {
-    if (userRepository.findByEmail(user.getEmail()).isEmpty()) {
+    if (userRepository.findByEmailAndNickName(user.getEmail(), user.getNickName()).isEmpty()) {
       userRepository.save(user);
     }
   }

@@ -28,6 +28,8 @@ public class Board extends BaseEntity {
 
   private String boardContent;
 
+  private Boolean enable = true;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "boardCategory")
   private Category category;
@@ -36,7 +38,7 @@ public class Board extends BaseEntity {
   @JoinColumn(name = "boardUser")
   private User user;
 
-  private Long boardViewCnt;
+  private Long boardViewCnt = 0L;
 
   @Builder
   private Board(
@@ -50,4 +52,11 @@ public class Board extends BaseEntity {
     this.user = user;
   }
 
+  public void changeEnable(final Boolean enable) {
+    this.enable = enable;
+  }
+  public void changeTitle(final String boardTitle) {this.boardTitle = boardTitle;}
+  public void changeContent(final String boardContent) {
+    this.boardContent = boardContent;
+  }
 }

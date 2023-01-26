@@ -3,10 +3,12 @@ package com.kite.scouter.global.config;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.kite.scouter.global.properties.RiotKeyProperties;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import java.time.Duration;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -20,7 +22,10 @@ import reactor.netty.http.client.HttpClient;
 import reactor.netty.resources.ConnectionProvider;
 
 @Component
+@RequiredArgsConstructor
 public class WebClientConfig {
+
+  private final RiotKeyProperties riotKeyProperties;
 
   public final ObjectMapper OM = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).registerModule(new JavaTimeModule());
 
@@ -28,11 +33,11 @@ public class WebClientConfig {
   public WebClient commonWebClient(ExchangeStrategies exchangeStrategies, HttpClient httpClient) {
     return WebClient
         .builder()
-        .clientConnector(new ReactorClientHttpConnector(httpClient))
         .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-        .defaultHeader("X-Riot-Token", "RGAPI-184067f9-961f-4131-b6b1-4546377bcda2")
         .defaultHeader(HttpHeaders.ORIGIN,"https://developer.riotgames.com")
+        .defaultHeader("X-Riot-Token", riotKeyProperties.getRiotKey())
         .defaultHeader(HttpHeaders.ACCEPT_CHARSET,"application/x-www-form-urlencoded; charset=UTF-8")
+        .clientConnector(new ReactorClientHttpConnector(httpClient))
         .exchangeStrategies(exchangeStrategies)
         .build();
   }

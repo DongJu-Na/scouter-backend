@@ -1,9 +1,11 @@
 package com.kite.scouter.global.config;
 
+import com.kite.scouter.global.core.CatchRequestMatcher;
 import com.kite.scouter.global.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,12 +26,15 @@ public class SecurityConfig {
     http
         .csrf()
         .disable()
-        .authorizeHttpRequests()
-        .requestMatchers("/api/v1/auth/**","/lol/api/**","/docs/**")
-        .permitAll()
-        .anyRequest()
-        .authenticated()
-        .and()
+        .securityMatchers((matcher) -> CatchRequestMatcher.getSkipRequestMatchers())
+        //.authorizeHttpRequests()
+        //.requestMatchers(CatchRequestMatcher.getSkipAntPathRequestMatcher(CatchRequestMatcher.REFRESH_TOKEN))
+        //.authorizeHttpRequests((match) -> match.requestMatchers("/api/lol/**").permitAll())
+        //.requestMatchers("/api/v1/auth/**","/api/lol/**","/docs/**", "/api/v1/boards**", "/api/v1/boards/**")
+        //.permitAll()
+        //.anyRequest()
+        //.authenticated()
+        //.and()
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
