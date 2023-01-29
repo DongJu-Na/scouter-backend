@@ -29,9 +29,6 @@ spring:
       platform: org.hibernate.dialect.H2Dialect
       separator: ^;
       mode: never
-  servlet:
-    multipart:
-      location: /Users/ftpfile
 logging:
   level:
     org:
