@@ -41,5 +41,5 @@ src/main/resources/application/riotKey/riotKey.properties
 src/main/resources/application/slack/slack.properties
 src/main/resources/application/jwt
 src/main/resources/application*.yml
-src/main/resources/db/**
+
 

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/category")
+@RequestMapping("/api/v1/categorys")
 @RequiredArgsConstructor
 public class CategoryController {
 

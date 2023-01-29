@@ -74,7 +74,10 @@ public class SummonerController {
 
     webClient.get()
         .uri(uriBuilder ->
-            uriBuilder.path(LOLBaseUrl.ASIA.getTitle() + "/lol/match/v5/matches/by-puuid/".concat(puuid).concat("/ids"))
+            uriBuilder
+                .scheme("https")
+                .host("asia.api.riotgames.com")
+                .path("/lol/match/v5/matches/by-puuid/".concat(puuid).concat("/ids"))
                 .queryParam("start",start)
                 .queryParam("count",count)
                 .build()
@@ -84,15 +87,16 @@ public class SummonerController {
         .bodyToMono(List.class)
         .block()
         .stream().forEach(
-            o -> {
+            o ->
+            {
               resutl.add(webClient.get()
                   .uri(LOLBaseUrl.ASIA.getTitle() + "/lol/match/v5/matches/".concat(o.toString()))
                   .accept(MediaType.APPLICATION_JSON)
                   .retrieve()
                   .bodyToMono(Map.class)
                   .block());
-
-        });
+            }
+        );
 
         return resutl;
 
