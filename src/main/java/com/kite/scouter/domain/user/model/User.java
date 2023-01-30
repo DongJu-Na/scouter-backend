@@ -44,7 +44,7 @@ public class User extends BaseEntity implements UserDetails {
   @Enumerated(EnumType.STRING)
   private Role role = Role.USER;
 
-  private Boolean enable;
+  private Boolean enable = true;
 
   @Builder
   private User(final String email,
