@@ -1,4 +1,6 @@
 spring:
+  banner:
+    location: classpath:application/banner/banner.txt
   jpa:
     hibernate:
       naming:
@@ -12,7 +14,7 @@ spring:
         format_sql: true
 
   datasource:
-    url: jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;DATABASE_TO_UPPER=true
+    url: jdbc:h2:mem:test;MODE=MySQL;
     driver-class-name: org.h2.Driver
     username: sa
     hikari:

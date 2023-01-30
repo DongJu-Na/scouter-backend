@@ -8,7 +8,7 @@ notification-api-docs
 :sectlinks:
 
 ifndef::snippets[]
-:snippets: ./build/generated-snippets
+:snippets: ../../../build/generated-snippets
 endif::[]
 
 

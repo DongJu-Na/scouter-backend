@@ -72,7 +72,7 @@
 
     <springProfile name="prod">
         <property name="LOG_FILE_NAME" value="scouter-backend"/>
-        <property name="LOG_DIR" value="/home/mk1/main-api-mk1-prod/logs/scouter-backend" />
+        <property name="LOG_DIR" value="../logs/scouter-backend" />
         <property name="LOG_PATH" value="${LOG_DIR}" />
 
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
