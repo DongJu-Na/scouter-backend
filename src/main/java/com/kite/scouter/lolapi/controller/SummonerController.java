@@ -188,13 +188,12 @@ public class SummonerController {
   }
 
   @GetMapping("/getLeagueInfo/{encryptedSummonerId}")
-  public ResponseEntity<Set> getLeagueInfo(@PathVariable final String encryptedSummonerId) {
+  public Mono<ResponseEntity<Set>> getLeagueInfo(@PathVariable final String encryptedSummonerId) {
     return  webClient.get()
         .uri(LOLBaseUrl.KR.getTitle() + "/lol/league/v4/entries/by-summoner/".concat(encryptedSummonerId))
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
-        .toEntity(Set.class)
-        .block();
+        .toEntity(Set.class);
   }
 
   @GetMapping("/getSummoners/test/{summonerName}")
