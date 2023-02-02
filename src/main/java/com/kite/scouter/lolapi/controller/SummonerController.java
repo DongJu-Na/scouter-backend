@@ -1,13 +1,20 @@
 package com.kite.scouter.lolapi.controller;
 
+import com.kite.scouter.global.core.CommonResponse;
 import com.kite.scouter.global.enums.LOLBaseUrl;
+import com.kite.scouter.global.enums.ResponseCode;
+import com.kite.scouter.global.exception.BadRequestException;
+import com.kite.scouter.global.utils.ObjectUtil;
 import com.kite.scouter.lolapi.dto.SummonerVO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.CoreSubscriber;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -37,7 +45,7 @@ public class SummonerController {
   }
 
   @GetMapping("/getMatchId/{puuid}")
-  public ResponseEntity<List> getMatchId(
+  public Mono<ResponseEntity<List>> getMatchId(
       @PathVariable final String puuid,
       @RequestParam(value = "startTime",  required = false) final Long startTime,
       @RequestParam(value = "endTime",  required = false) final Long endTime,
@@ -60,10 +68,9 @@ public class SummonerController {
         )
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
-        .toEntity(List.class)
-        .block();
+        .toEntity(List.class);
   }
-
+/*
   @GetMapping("/getMatchesInfo/{puuid}")
   public List getMatchIdTest(
       @PathVariable final String puuid,
@@ -97,32 +104,70 @@ public class SummonerController {
                   .block());
             }
         );
-
         return resutl;
 
-  }
-  /*
-  @GetMapping("/getMatchId/test2/{puuid}")
-  public Flux getMatchIdTest2(@PathVariable final String puuid) {
+  }*/
 
+  @GetMapping("/getMatchesInfo/{puuid}")
+  private List getMatchIdTest(
+      @PathVariable final String puuid,
+      @RequestParam(value = "start", defaultValue = "0", required = false) final int start,
+      @RequestParam(value = "count", defaultValue = "10", required = false) final int count
+  ) throws Exception {
 
-    return webClient.get()
-        .uri(LOLBaseUrl.ASIA.getTitle() + "/lol/match/v5/matches/by-puuid/".concat(puuid).concat("/ids"))
+    List<Map> result = new ArrayList<>();
+
+    CountDownLatch latch = new CountDownLatch(count);
+
+    List matchList =
+      webClient.get()
+        .uri(uriBuilder ->
+              uriBuilder
+                .scheme("https")
+                .host("asia.api.riotgames.com")
+                .path("/lol/match/v5/matches/by-puuid/".concat(puuid).concat("/ids"))
+                .queryParam("start",start)
+                .queryParam("count",count)
+                .build()
+            )
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
         .bodyToMono(List.class)
-        .block()
-        .stream().flatMap(o -> {
-                  webClient.get()
-                      .uri(LOLBaseUrl.ASIA.getTitle() + "/lol/match/v5/matches/".concat(o.toString()))
-                      .accept(MediaType.APPLICATION_JSON)
-                      .retrieve()
-                      .bodyToMono(Map.class);
-            }
+        .block();
 
-    //return resutl;
+    if(ObjectUtil.isEmpty(matchList)){
+      throw BadRequestException.of(ResponseCode.LY003, "lol.matchId.not.find");
+    }
 
-  }*/
+    getMatchInfo(
+      result,
+      matchList,
+      latch
+    );
+    waitThreads(latch);
+    return result;
+  }
+
+  private void getMatchInfo(List<Map> result, List<String> matchIds, CountDownLatch latch) {
+    matchIds.stream()
+      .forEach(
+        o -> webClient.get()
+          .uri(LOLBaseUrl.ASIA.getTitle() + "/lol/match/v5/matches/".concat(o.toString()))
+          .accept(MediaType.APPLICATION_JSON)
+          .retrieve()
+          .bodyToMono(Map.class)
+          .subscribe(map -> {
+                result.add(map);
+                latch.countDown();
+          })
+      );
+  }
+
+  private void waitThreads(CountDownLatch latch) throws InterruptedException {
+    if (!latch.await(2, TimeUnit.SECONDS)) {
+      throw new RuntimeException();
+    }
+  }
 
   public Flux<Map> getMatchDetailMethod(String matchId) {
     return  webClient.get()

@@ -31,8 +31,13 @@ public enum ResponseCode implements EnumMapperType {
 
   CY0001("Cannot Find Category"),
 
+  LY003("Cannot find MatchIds"),
+
   IN0001("Common IO Exception"),
   IN0002("NullPoint Exception");
+
+
+
   private String title;
 
   @Override
