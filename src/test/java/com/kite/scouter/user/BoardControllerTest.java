@@ -92,7 +92,8 @@ public class BoardControllerTest {
             fieldWithPath("content[0].createdDt").type(JsonFieldType.STRING).description("등록일시"),
             fieldWithPath("content[0].boardTitle").type(JsonFieldType.STRING).description("제목"),
             fieldWithPath("content[0].boardUserNickName").type(JsonFieldType.STRING).description("작성자"),
-            fieldWithPath("content[0].boardViewCnt").type(JsonFieldType.NUMBER).description("조회수")
+            fieldWithPath("content[0].boardViewCnt").type(JsonFieldType.NUMBER).description("조회수"),
+            fieldWithPath("content[0].replyCount").type(JsonFieldType.NUMBER).description("댓글수")
         )
       )
     );
