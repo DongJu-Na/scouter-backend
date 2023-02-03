@@ -63,6 +63,15 @@ public class BoardController {
     return CommonResponse.from(SuccessData.of());
   }
 
+  @PutMapping("/{boardId}/viewCount")
+  @ResponseStatus(CREATED)
+  public CommonResponse<SuccessData> updateBoardViewCount(
+      @PathVariable final Long boardId
+  ) {
+    boardService.updateBoardView(boardId);
+    return CommonResponse.from(SuccessData.of());
+  }
+
   @DeleteMapping("/{boardId}")
   @ResponseStatus(CREATED)
   public CommonResponse<SuccessData> deleteBoard(@PathVariable final Long boardId) {

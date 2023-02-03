@@ -67,4 +67,7 @@ public class Board extends BaseEntity {
   public void changeContent(final String boardContent) {
     this.boardContent = boardContent;
   }
+  public void changeViewCountPlusOne() {
+    this.boardViewCnt++;
+  }
 }

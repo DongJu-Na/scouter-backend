@@ -67,6 +67,13 @@ public class BoardServiceImpl implements BoardService {
   }
 
   @Override
+  public void updateBoardView(final Long boardId) {
+    Board board = getBoardById(boardId);
+    board.changeViewCountPlusOne();
+    boardRepo.save(board);
+  }
+
+  @Override
   public void deleteBoard(Long boardId) {
     Board board = getBoardById(boardId);
     board.changeEnable(false);

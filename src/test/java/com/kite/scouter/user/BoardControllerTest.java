@@ -121,6 +121,7 @@ public class BoardControllerTest {
           fieldWithPath("boardContent").type(JsonFieldType.STRING).description("게시글 내용"),
           fieldWithPath("createdDt").type(JsonFieldType.STRING).description("작성일자"),
           fieldWithPath("boardUserNickName").type(JsonFieldType.STRING).description("작성자"),
+          fieldWithPath("replyCount").type(JsonFieldType.NUMBER).description("댓글수"),
           fieldWithPath("boardViewCnt").type(JsonFieldType.NUMBER).description("조회수")
         )
       )

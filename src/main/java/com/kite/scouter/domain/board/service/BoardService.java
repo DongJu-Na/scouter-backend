@@ -20,5 +20,7 @@ public interface BoardService {
 
   void updateBoard(Long boardId, UpdateBoard updateBoard);
 
+  void updateBoardView(Long boardId);
+
   void deleteBoard(Long boardId);
 }
