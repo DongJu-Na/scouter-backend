@@ -18,11 +18,13 @@ public class ReplyDto {
     private Long replyId;
     private LocalDateTime createdDt;
     private String replyContent;
+    private String replyUserNickName;
 
     private ResponseReplysByBoardId(final Reply reply) {
       this.replyId = reply.getReplyId();
       this.replyContent = reply.getReplyContent();
       this.createdDt = reply.getCreatedDt();
+      this.replyUserNickName = reply.getUser().getNickName();
     }
 
     public static ResponseReplysByBoardId from(final Reply reply) {
