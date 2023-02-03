@@ -51,7 +51,7 @@ public class BoardDto {
     private ResponseBoardById(final Board board){
       this.boardId = board.getBoardId();
       this.boardTitle = board.getBoardTitle();
-      this.boardContent = board.getBoardTitle();
+      this.boardContent = board.getBoardContent();
       this.createdDt = board.getCreatedDt();
       this.boardUserNickName = board.getUser().getNickName();
       this.boardViewCnt = board.getBoardViewCnt();

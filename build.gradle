@@ -99,7 +99,7 @@ asciidoctor {
 bootJar {
 	dependsOn asciidoctor
 	from ("${asciidoctor.outputDir}/html5") {
-		into "$buildDir/docs"
+		into "BOOT-INF/classes/static/docs"
 	}
 }
 
