@@ -47,6 +47,7 @@ public class BoardCustomRepoImpl extends QuerydslRepositorySupport implements Bo
         )
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
+        .orderBy(board.boardId.desc())
         .orderBy(board.createdDt.desc())
         .fetch();
 
@@ -57,8 +58,6 @@ public class BoardCustomRepoImpl extends QuerydslRepositorySupport implements Bo
             searchByCategory(categoryId),
             searchByEnabledTrue()
         )
-        .offset(pageable.getOffset())
-        .limit(pageable.getPageSize())
         .fetch().get(0);
 
     return new PageImpl<>(ResponseBoardsByCategory.from(content), pageable, totalElement);

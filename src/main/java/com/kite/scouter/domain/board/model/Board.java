@@ -1,8 +1,10 @@
 package com.kite.scouter.domain.board.model;
 
 import com.kite.scouter.domain.category.model.Category;
+import com.kite.scouter.domain.reply.model.Reply;
 import com.kite.scouter.domain.user.model.User;
 import com.kite.scouter.global.core.BaseEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +12,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,6 +44,9 @@ public class Board extends BaseEntity {
   private User user;
 
   private Long boardViewCnt = 0L;
+
+  @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Reply> replyList = new ArrayList<>();
 
   @Builder
   private Board(
