@@ -89,7 +89,8 @@ public class ReplyControllerTest {
             fieldWithPath("content[0].replyId").type(JsonFieldType.NUMBER).description("댓글 ID"),
             fieldWithPath("content[0].replyContent").type(JsonFieldType.STRING).description("댓글내용"),
             fieldWithPath("content[0].createdDt").type(JsonFieldType.STRING).description("등록일시"),
-            fieldWithPath("content[0].replyUserNickName").type(JsonFieldType.STRING).description("작성자")
+            fieldWithPath("content[0].replyUserNickName").type(JsonFieldType.STRING).description("작성자"),
+            fieldWithPath("content[0].replyUserEmail").type(JsonFieldType.STRING).description("작성자 이메일")
         )
       )
     );

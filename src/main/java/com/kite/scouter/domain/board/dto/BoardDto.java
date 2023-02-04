@@ -48,6 +48,7 @@ public class BoardDto {
     private String boardContent;
     private LocalDateTime createdDt;
     private String boardUserNickName;
+    private String boardUserEmail;
     private Long boardViewCnt;
     private int replyCount;
 
@@ -57,6 +58,7 @@ public class BoardDto {
       this.boardContent = board.getBoardContent();
       this.createdDt = board.getCreatedDt();
       this.boardUserNickName = board.getUser().getNickName();
+      this.boardUserEmail = board.getUser().getEmail();
       this.boardViewCnt = board.getBoardViewCnt();
       this.replyCount = board.getReplyList().size();
     }
