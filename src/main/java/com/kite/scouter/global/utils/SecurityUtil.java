@@ -25,16 +25,16 @@ public class SecurityUtil {
   }
 
 
-  private static ZonedDateTime getUtcZonedDateTime() {
-    return ZonedDateTime.now(ZoneId.of("UTC"));
+  private static ZonedDateTime getCommonZonedDateTime() {
+    return ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
   }
 
-  public static Date getDateFromUtcZonedDateTime(final Long minutes) {
-    return Date.from(getUtcZonedDateTime().plusMinutes(minutes).toInstant());
+  public static Date getDateFromCommonZonedDateTime(final Long minutes) {
+    return Date.from(getCommonZonedDateTime().plusMinutes(minutes).toInstant());
   }
 
-  public static Date getDateFromUtcZonedDateTime() {
-    return getDateFromUtcZonedDateTime(0L);
+  public static Date getDateFromCommonZonedDateTime() {
+    return getDateFromCommonZonedDateTime(0L);
   }
 
 }

@@ -42,4 +42,6 @@ src/main/resources/application/slack/slack.properties
 src/main/resources/application/jwt
 src/main/resources/application*.yml
 
+logs
+
 

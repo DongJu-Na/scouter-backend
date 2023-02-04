@@ -10,7 +10,7 @@ public class LocalDateTimeUtil {
   }
 
   public static LocalDateTime getLocalDateTime() {
-    return LocalDateTime.now(ZoneId.of("UTC"));
+    return LocalDateTime.now(ZoneId.of("Asia/Seoul"));
   }
 
 }

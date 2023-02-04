@@ -5,9 +5,15 @@ import com.kite.scouter.global.enums.ResponseCode;
 import com.kite.scouter.global.properties.EnvironmentProperties;
 import com.kite.scouter.global.slack.props.SlackProps;
 import com.kite.scouter.global.slack.service.SlackService;
+import com.nimbusds.jose.util.JSONObjectUtils;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -35,13 +41,18 @@ public class SlackServiceImpl implements SlackService {
 
       String message = """
       {
-        "text" : "%s : %s (%s)\\n-API : %s\\n-remoteIP: %s\\n-serverIP: %s"
+        "text" : "%s : %s (%s)
+        \\n-API : %s
+        \\n-Parameters : %s
+        \\n-remoteIP: %s
+        \\n-serverIP: %s"
       }
        """.formatted(
           exception.getClass().getSimpleName(),
           msg.replace("\"","'"),
           responseCode.getTitle(),
-          request.getRequestURL(),
+          request.getRequestURI(),
+          request.getQueryString(),
           request.getRemoteAddr(),
           request.getLocalAddr()
       );

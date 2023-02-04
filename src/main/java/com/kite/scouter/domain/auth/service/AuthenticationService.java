@@ -58,7 +58,7 @@ public class AuthenticationService {
     return TokenDto.of(
         jwtService.generateToken(userContext),
         jwtService.generateRefreshToken(userContext),
-        SecurityUtil.getDateFromUtcZonedDateTime(jwtProperties.getExpireMinutes()).getTime()
+        SecurityUtil.getDateFromCommonZonedDateTime(jwtProperties.getExpireMinutes()).getTime()
     );
   }
 
@@ -82,7 +82,7 @@ public class AuthenticationService {
     return TokenDto.of(
         jwtService.generateToken(userContext),
         jwtService.generateRefreshToken(userContext),
-        SecurityUtil.getDateFromUtcZonedDateTime(jwtProperties.getExpireMinutes()).getTime()
+        SecurityUtil.getDateFromCommonZonedDateTime(jwtProperties.getExpireMinutes()).getTime()
     );
   }
 
@@ -92,7 +92,7 @@ public class AuthenticationService {
     return TokenDto.of(
         jwtService.generateToken(userContext),
         jwtService.generateRefreshToken(userContext),
-        SecurityUtil.getDateFromUtcZonedDateTime(jwtProperties.getExpireMinutes()).getTime()
+        SecurityUtil.getDateFromCommonZonedDateTime(jwtProperties.getExpireMinutes()).getTime()
     );
   }
 }

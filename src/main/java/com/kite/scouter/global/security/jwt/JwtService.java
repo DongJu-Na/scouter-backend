@@ -41,11 +41,11 @@ public class JwtService {
   }
 
   public String generateToken(final UserContext userContext) {
-    return generateToken(userContext, SecurityUtil.getDateFromUtcZonedDateTime(jwtProperties.getExpireMinutes()));
+    return generateToken(userContext, SecurityUtil.getDateFromCommonZonedDateTime(jwtProperties.getExpireMinutes()));
   }
 
   public String generateRefreshToken(final UserContext userContext) {
-    return generateToken(userContext, SecurityUtil.getDateFromUtcZonedDateTime(jwtProperties.getRefreshExpireMinutes()));
+    return generateToken(userContext, SecurityUtil.getDateFromCommonZonedDateTime(jwtProperties.getRefreshExpireMinutes()));
   }
 
   public String generateToken(
@@ -56,7 +56,7 @@ public class JwtService {
         .builder()
         .setSubject(userContext.getEmail())
         .claim("NICK_NAME",userContext.getNickName())
-        .setIssuedAt(SecurityUtil.getDateFromUtcZonedDateTime())
+        .setIssuedAt(SecurityUtil.getDateFromCommonZonedDateTime())
         .setExpiration(expire)
         .signWith(getSignInKey(), SignatureAlgorithm.HS256)
         .compact();
@@ -69,7 +69,7 @@ public class JwtService {
   }
 
   private boolean isTokenExpired(String token) {
-    return extractExpiration(token).before(SecurityUtil.getDateFromUtcZonedDateTime());
+    return extractExpiration(token).before(SecurityUtil.getDateFromCommonZonedDateTime());
   }
 
   private Date extractExpiration(String token) {
