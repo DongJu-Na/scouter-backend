@@ -57,8 +57,6 @@ public class ReplyCustomRepoImpl extends QuerydslRepositorySupport implements Re
             searchByBoard(boardId),
             searchByEnabledTrue()
         )
-        .offset(pageable.getOffset())
-        .limit(pageable.getPageSize())
         .fetch().get(0);
 
     return new PageImpl<>(ResponseReplysByBoardId.from(content), pageable, totalElement);
