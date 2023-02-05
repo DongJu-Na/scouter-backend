@@ -1,5 +1,6 @@
 package com.kite.scouter.lolapi.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kite.scouter.global.core.CommonResponse;
 import com.kite.scouter.global.enums.LOLBaseUrl;
 import com.kite.scouter.global.enums.ResponseCode;
@@ -7,11 +8,17 @@ import com.kite.scouter.global.exception.BadRequestException;
 import com.kite.scouter.global.utils.ObjectUtil;
 import com.kite.scouter.lolapi.dto.SummonerVO;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -43,6 +50,15 @@ public class SummonerController {
         .retrieve()
         .toEntity(SummonerVO.class);
   }
+  
+  @GetMapping("/getLeagueInfo/{encryptedSummonerId}")
+  public Mono<ResponseEntity<Set>> getLeagueInfo(@PathVariable final String encryptedSummonerId) {
+    return  webClient.get()
+        .uri(LOLBaseUrl.KR.getTitle() + "/lol/league/v4/entries/by-summoner/".concat(encryptedSummonerId))
+        .accept(MediaType.APPLICATION_JSON)
+        .retrieve()
+        .toEntity(Set.class);
+  }
 
   @GetMapping("/getMatchId/{puuid}")
   public Mono<ResponseEntity<List>> getMatchId(
@@ -70,46 +86,19 @@ public class SummonerController {
         .retrieve()
         .toEntity(List.class);
   }
-/*
-  @GetMapping("/getMatchesInfo/{puuid}")
-  public List getMatchIdTest(
-      @PathVariable final String puuid,
-      @RequestParam(value = "start", defaultValue = "0", required = false) final int start,
-      @RequestParam(value = "count", defaultValue = "20", required = false) final int count
-  ) {
-    List<Map> resutl = new ArrayList<>();
-
-    webClient.get()
-        .uri(uriBuilder ->
-            uriBuilder
-                .scheme("https")
-                .host("asia.api.riotgames.com")
-                .path("/lol/match/v5/matches/by-puuid/".concat(puuid).concat("/ids"))
-                .queryParam("start",start)
-                .queryParam("count",count)
-                .build()
-        )
+  
+  @GetMapping("/getMatchDetail/{matchId}")
+  public ResponseEntity<Map> getMatchDetail(@PathVariable final String matchId) {
+    return  webClient.get()
+        .uri(LOLBaseUrl.ASIA.getTitle() + "/lol/match/v5/matches/".concat(matchId))
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
-        .bodyToMono(List.class)
-        .block()
-        .stream().forEach(
-            o ->
-            {
-              resutl.add(webClient.get()
-                  .uri(LOLBaseUrl.ASIA.getTitle() + "/lol/match/v5/matches/".concat(o.toString()))
-                  .accept(MediaType.APPLICATION_JSON)
-                  .retrieve()
-                  .bodyToMono(Map.class)
-                  .block());
-            }
-        );
-        return resutl;
-
-  }*/
+        .toEntity(Map.class)
+        .block();
+  }
 
   @GetMapping("/getMatchesInfo/{puuid}")
-  private List getMatchIdTest(
+  private List getMatchesInfo(
       @PathVariable final String puuid,
       @RequestParam(value = "start", defaultValue = "0", required = false) final int start,
       @RequestParam(value = "count", defaultValue = "10", required = false) final int count
@@ -176,50 +165,96 @@ public class SummonerController {
         .retrieve()
         .bodyToFlux(Map.class);
   }
-
-  @GetMapping("/getMatchDetail/{matchId}")
-  public ResponseEntity<Map> getMatchDetail(@PathVariable final String matchId) {
-    return  webClient.get()
-        .uri(LOLBaseUrl.ASIA.getTitle() + "/lol/match/v5/matches/".concat(matchId))
-        .accept(MediaType.APPLICATION_JSON)
-        .retrieve()
-        .toEntity(Map.class)
-        .block();
+  
+  @SuppressWarnings("unchecked")
+  @GetMapping("/getRankingInfo")
+  public List<?> getRankingInfo() throws Exception{
+	  List<?> result = new ArrayList<>();
+	  ObjectMapper obm = new ObjectMapper();
+	  Object challengerleaguesObj = null,grandmasterleaguesObj = null,masterleaguesObj = null;
+	  Map<String, Object> challengerleagues = null,grandmasterleagues = null,masterleagues = null;
+	  
+	  try {
+		  challengerleaguesObj = webClient.get()
+				  .uri(uriBuilder ->uriBuilder
+						  .scheme("https")
+						  .host("kr.api.riotgames.com")
+						  .path("/lol/league/v4/challengerleagues/by-queue/".concat("RANKED_SOLO_5x5"))
+						  .build()
+						  )
+				  .accept(MediaType.APPLICATION_JSON)
+				  .retrieve()
+				  .bodyToMono(Object.class)
+				  .block();
+		  
+		  grandmasterleaguesObj = webClient.get()
+				  .uri(uriBuilder ->uriBuilder
+						  .scheme("https")
+						  .host("kr.api.riotgames.com")
+						  .path("/lol/league/v4/grandmasterleagues/by-queue/".concat("RANKED_SOLO_5x5"))
+						  .build()
+						  )
+				  .accept(MediaType.APPLICATION_JSON)
+				  .retrieve()
+				  .bodyToMono(Object.class)
+				  .block();
+		  
+		  masterleaguesObj = webClient.get()
+				  .uri(uriBuilder ->uriBuilder
+						  .scheme("https")
+						  .host("kr.api.riotgames.com")
+						  .path("/lol/league/v4/masterleagues/by-queue/".concat("RANKED_SOLO_5x5"))
+						  .build()
+						  )
+				  .accept(MediaType.APPLICATION_JSON)
+				  .retrieve()
+				  .bodyToMono(Object.class)
+				  .block();
+		  
+		  challengerleagues = obm.convertValue(challengerleaguesObj, Map.class);
+		  grandmasterleagues = obm.convertValue(grandmasterleaguesObj, Map.class);
+		  masterleagues = obm.convertValue(masterleaguesObj, Map.class);
+		  
+		  result = Stream
+				  	   .of(put2KeyMap((List<?>) challengerleagues.get("entries"), "tier", "CHALLENGER")
+						  ,put2KeyMap((List<?>) grandmasterleagues.get("entries"), "tier", "GRANDMASTER")
+						  ,put2KeyMap((List<?>) masterleagues.get("entries"), "tier", "MASTER"))
+				  .flatMap(Collection::stream)
+				  .collect(Collectors.toList());
+		  		  
+		  
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	  
+	  
+	   
+	   
+	  return result;
+  }
+  
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+private List<?> put2KeyMap(List<?> list , String key , String value) {
+	  List result = new ArrayList<>();
+	  Map<String, Object> tempMap = new HashMap<>();
+	  
+	try {
+		 for (int i = 0; i < list.size(); i++) {
+			 tempMap =  (Map<String, Object>) list.get(0);
+			 tempMap.put(key, value);
+			 result.add(tempMap);
+		 }
+	} catch (Exception e) {
+		result = null;
+		e.printStackTrace();
+	}
+	  
+	  return result;
   }
 
-  @GetMapping("/getLeagueInfo/{encryptedSummonerId}")
-  public Mono<ResponseEntity<Set>> getLeagueInfo(@PathVariable final String encryptedSummonerId) {
-    return  webClient.get()
-        .uri(LOLBaseUrl.KR.getTitle() + "/lol/league/v4/entries/by-summoner/".concat(encryptedSummonerId))
-        .accept(MediaType.APPLICATION_JSON)
-        .retrieve()
-        .toEntity(Set.class);
-  }
-
-  @GetMapping("/getSummoners/test/{summonerName}")
-  public void getSummonersTest(@PathVariable final String summonerName) {
-     SummonerVO result1 = webClient.get()
-        .uri(LOLBaseUrl.KR.getTitle() + "/lol/summoner/v4/summoners/by-name/".concat(summonerName))
-        .accept(MediaType.APPLICATION_JSON)
-        .retrieve()
-        .bodyToMono(SummonerVO.class)
-        .block();
-
-     List result2 = webClient.get()
-        .uri(LOLBaseUrl.ASIA.getTitle() + "/lol/match/v5/matches/by-puuid/".concat("sdlegeEHnOBTb50W3eGrOaps3eRus4G0z83E6Iof_BxRm-8vqCgfPKNT5jFrSe_i30M88DYMMuOIvQ").concat("/ids"))
-        .accept(MediaType.APPLICATION_JSON)
-        .retrieve()
-        .bodyToMono(List.class)
-        .block();
 
 
-     Set result3 = webClient.get()
-        .uri(LOLBaseUrl.KR.getTitle() + "/lol/league/v4/entries/by-summoner/".concat("uRtiP7MPouAOcFTEDxrNnKwnZ_nH2MEK4j-zBm5mnNBMIK4NeQYz8HWUfA"))
-        .accept(MediaType.APPLICATION_JSON)
-        .retrieve()
-        .bodyToMono(Set.class)
-         .block();
 
-  }
+
 
 }
