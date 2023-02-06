@@ -11,7 +11,6 @@
 * [사용 기술](#-사용-기술)
 * [구현 기능](#-구현-기능)
 * [API 명세서](#-API-명세서)
-* [ERD 설계](#-ERD-설계)
 * [트러블슈팅](#-트러블슈팅)
 
 # 🕹 사용 기술
@@ -54,6 +53,11 @@
 # 🤙🏻 API 명세서
 HTTP 메서드를 통해 행위를 명시할 수 있도록 RESTful 방식으로 설계했습니다. <br/><br/>
 
-[회원](http://1.234.189.11/docs/user-guide.html)
-[게시판](http://1.234.189.11/docs/board-guide.html)
-[댓글](http://1.234.189.11/docs/Reply-guide.html)
+[회원](http://1.234.189.11/docs/user-guide.html)<br/>
+[게시판](http://1.234.189.11/docs/board-guide.html)<br/>
+[댓글](http://1.234.189.11/docs/Reply-guide.html)<br/>
+
+# 👾 트러블슈팅
+### 회원 인증 및 인가 기능 구현 (Spring Security + JWT)
+
+퍼블릭 사이트
