@@ -1,16 +1,8 @@
 package com.kite.scouter.lolapi.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kite.scouter.global.core.CommonResponse;
-import com.kite.scouter.global.enums.LOLBaseUrl;
-import com.kite.scouter.global.enums.ResponseCode;
-import com.kite.scouter.global.exception.BadRequestException;
-import com.kite.scouter.global.utils.ObjectUtil;
-import com.kite.scouter.lolapi.dto.SummonerVO;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,9 +11,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.CoreSubscriber;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kite.scouter.global.enums.LOLBaseUrl;
+import com.kite.scouter.global.enums.ResponseCode;
+import com.kite.scouter.global.exception.BadRequestException;
+import com.kite.scouter.global.utils.ObjectUtil;
+import com.kite.scouter.lolapi.dto.SummonerVO;
+
+import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -169,7 +166,7 @@ public class SummonerController {
   @SuppressWarnings("unchecked")
   @GetMapping("/getRankingInfo")
   public List<?> getRankingInfo() throws Exception{
-	  List<?> result = new ArrayList<>();
+	  List<Map<String,Object>> result = new ArrayList<>();
 	  ObjectMapper obm = new ObjectMapper();
 	  Object challengerleaguesObj = null,grandmasterleaguesObj = null,masterleaguesObj = null;
 	  Map<String, Object> challengerleagues = null,grandmasterleagues = null,masterleagues = null;
@@ -214,33 +211,40 @@ public class SummonerController {
 		  challengerleagues = obm.convertValue(challengerleaguesObj, Map.class);
 		  grandmasterleagues = obm.convertValue(grandmasterleaguesObj, Map.class);
 		  masterleagues = obm.convertValue(masterleaguesObj, Map.class);
+		  		  
+		  
 		  
 		  result = Stream
-				  	   .of(put2KeyMap((List<?>) challengerleagues.get("entries"), "tier", "CHALLENGER")
-						  ,put2KeyMap((List<?>) grandmasterleagues.get("entries"), "tier", "GRANDMASTER")
-						  ,put2KeyMap((List<?>) masterleagues.get("entries"), "tier", "MASTER"))
+				  	   .of(put2KeyMap((List<Map<String,Object>>) challengerleagues.get("entries"), "tier", "CHALLENGER")
+						  ,put2KeyMap((List<Map<String,Object>>) grandmasterleagues.get("entries"), "tier", "GRANDMASTER")
+						  ,put2KeyMap((List<Map<String,Object>>) masterleagues.get("entries"), "tier", "MASTER"))
 				  .flatMap(Collection::stream)
 				  .collect(Collectors.toList());
-		  		  
+		  
+		  if(result != null && result.size() > 0) {
+			  result = result.stream()
+			  .sorted((v1 , v2) -> Integer.compare((int)v2.get("leaguePoints"), (int)v1.get("leaguePoints")))
+			  .collect(Collectors.toList());
+			  
+		  }
+				  
 		  
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
 	  
-	  
-	   
 	   
 	  return result;
   }
   
   @SuppressWarnings({ "unchecked", "rawtypes" })
-private List<?> put2KeyMap(List<?> list , String key , String value) {
+private List<Map<String,Object>> put2KeyMap(List<Map<String, Object>> map , String key , String value) {
 	  List result = new ArrayList<>();
 	  Map<String, Object> tempMap = new HashMap<>();
 	  
 	try {
-		 for (int i = 0; i < list.size(); i++) {
-			 tempMap =  (Map<String, Object>) list.get(0);
+		 for (int i = 0; i < map.size(); i++) {
+			 tempMap =  (Map<String, Object>) map.get(i);
 			 tempMap.put(key, value);
 			 result.add(tempMap);
 		 }
