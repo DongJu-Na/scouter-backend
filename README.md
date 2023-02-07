@@ -1,6 +1,8 @@
 # <img src="http://1.234.189.11/gitlogo/teemowhite.png">
+[FE GitHub](https://github.com/DongJu-Na/scouter-frontend)<br/>
 롤 전적검색 사이트 [Scouter](http://1.234.189.11/) api 프로젝트 입니다<br/>
 `2023.01.01 ~ 2023.02.05` 동안 `spring Boot`를 이용해 구현했습니다.
+
 
 이 프로젝트를 통해 이루고자 한 목표는 <br/>
 `Spring에서 제공하는 프레임워클 직접 설정하고 사용하며 Spring에 대한 이해도를 높임` <br/>
